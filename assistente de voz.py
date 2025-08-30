@@ -13,18 +13,21 @@ MIC_ADJUSTMENT_DURATION = 2
 MIC_TIMEOUT = 20           
 MIC_PHRASE_LIMIT = 30      
 
+# Inicializa o mecanismo de texto para fala com as configurações definidas
 def init_text_to_speech():
     engine = pyttsx3.init()
     engine.setProperty('rate', TEXT_TO_SPEECH_RATE)
     engine.setProperty('volume', TEXT_TO_SPEECH_VOLUME)
     return engine
 
+# Fala o texto usando o mecanismo de voz e imprime no terminal
 def speak(text, engine):
     print(f"Assistente: {text}")
     engine.say(text)
     engine.runAndWait()
     time.sleep(0.5)
 
+# Escuta a entrada do microfone e tenta reconhecer o que foi dito
 def listen_command(recognizer, source):
     """Ouve e reconhece comandos de voz."""
     print("Aguardando a sua fala...")
@@ -44,6 +47,7 @@ def listen_command(recognizer, source):
         speak(f"Ocorreu um erro inesperado: {e}", engine)
     return ""
 
+# Procura o caminho do executável do aplicativo com base em seu nome
 def find_executable(app_name):
     paths = {
         "spotify": [
@@ -70,6 +74,7 @@ def find_executable(app_name):
             return path
     return None
 
+# Tenta abrir o Spotify via caminho local ou protocolo URI
 def open_spotify(engine):
     path = find_executable("spotify")
     if path:
@@ -85,6 +90,7 @@ def open_spotify(engine):
         except Exception as e:
             speak(f"Spotify não encontrado ou erro ao abrir: {e}", engine)
 
+# Tenta abrir o WhatsApp via caminho local ou protocolo URI
 def open_whatsapp(engine):
     path = find_executable("whatsapp")
     if path:
@@ -100,6 +106,7 @@ def open_whatsapp(engine):
         except Exception as e:
             speak(f"WhatsApp não encontrado ou erro ao abrir: {e}", engine)
 
+# Abre o Bloco de Notas (Notepad)
 def open_notepad(engine):
     try:
         subprocess.run(['notepad'], shell=True)
@@ -107,6 +114,7 @@ def open_notepad(engine):
     except Exception as e:
         speak(f"Erro ao abrir o Bloco de Notas: {e}", engine)
 
+# Abre a Calculadora do Windows
 def open_calculator(engine):
     try:
         subprocess.run(['calc'], shell=True)
@@ -118,6 +126,7 @@ def open_calculator(engine):
         except Exception as e2:
             speak(f"Erro ao abrir a Calculadora: {e2}", engine)
 
+# Tenta abrir o jogo Valorant usando o cliente da Riot ou diretamente
 def open_valorant(engine):
     path = find_executable("valorant")
     if path:
@@ -134,6 +143,7 @@ def open_valorant(engine):
     else:
         speak("Valorant não encontrado.", engine)
 
+# Tenta abrir o jogo Undertale
 def open_undertale(engine):
     path = find_executable("undertale")
     if path:
@@ -145,6 +155,7 @@ def open_undertale(engine):
     else:
         speak("Undertale não encontrado.", engine)
 
+# Abre o YouTube no navegador padrão
 def open_youtube(engine):
     try:
         webbrowser.open("https://www.youtube.com")
@@ -152,6 +163,7 @@ def open_youtube(engine):
     except Exception as e:
         speak(f"Erro ao abrir o YouTube: {e}", engine)
 
+# Abre o Google no navegador padrão
 def open_google(engine):
     try:
         webbrowser.open("https://www.google.com")
@@ -159,6 +171,7 @@ def open_google(engine):
     except Exception as e:
         speak(f"Erro ao abrir o Google: {e}", engine)
 
+# Abre o LinkedIn no navegador padrão
 def open_linkedin(engine):
     try:
         webbrowser.open("https://www.linkedin.com")
@@ -166,6 +179,7 @@ def open_linkedin(engine):
     except Exception as e:
         speak(f"Erro ao abrir o Linkedin: {e}", engine)
 
+# Função principal que executa o assistente de voz
 def run_assistant():
     global engine
     engine = init_text_to_speech()
@@ -210,12 +224,11 @@ def run_assistant():
             else:
                 speak("Comando não reconhecido. Tente novamente.", engine)
 
+# Ponto de entrada do programa. Inicia o assistente e trata erros.
 if __name__ == "__main__":
     try:
         run_assistant()
     except KeyboardInterrupt:
         print("\n>> Assistente encerrado pelo usuário.")
-    except Exception as e:
-        print(f">> Erro inesperado: {e}")
-        engine = init_text_to_speech()
-        speak(f"Ocorreu um erro: {e}", engine)
+
+
